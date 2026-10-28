@@ -1,7 +1,7 @@
 {
-  "name": "Money MAD \u2014 Private Finance Manager",
+  "name": "Money MAD",
   "short_name": "Money MAD",
-  "description": "Private, offline-first personal finance manager with manual iCloud Drive backup workflow.",
+  "description": "Private personal finance manager in MAD with reports and bill tracking.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
