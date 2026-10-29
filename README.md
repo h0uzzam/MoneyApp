@@ -13,3 +13,6 @@ Upload the five app files to your HTTPS host, replacing the old versions. If the
 
 ## Data and privacy
 Records remain in local browser storage; the app does not send financial data to a server. Make JSON backups regularly. The app includes manual iCloud Drive backup/restore, not automatic iCloud sync.
+
+
+Version 5 improvements: editable current account balances; receipt picker no longer forces the camera, allowing iPhone photo library/files choices where offered; transaction confirmation; bill payments linked to an account and recorded in transaction history; paid debts and loans separated from outstanding balances; clearer insights summary and navigation icons.
