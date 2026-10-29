@@ -95,7 +95,7 @@ function showPage(p){activePage=p;document.querySelectorAll('.page').forEach(x=>
 function itemHTML({icon='🧾',title,sub='',amount='',amountClass='',extra='',actions='',id=''}){return `<div class="item" data-item="${esc(id)}"><div class="item-icon">${icon}</div><div class="item-main"><strong>${esc(title)}</strong><small>${esc(sub)}</small>${extra}</div><div class="item-end"><strong class="${amountClass}">${amount}</strong>${actions}</div></div>`}
 function empty(title,desc){return `<div class="empty"><b>${esc(title)}</b>${esc(desc)}</div>`}
 let lastReminderDay='';
-function checkBillReminders(){try{const todayStr=today();if(lastReminderDay===todayStr)return;const due=data.bills.filter(b=>!b.paid&&b.due&&b.due<=todayStr);if(!due.length)return;lastReminderDay=todayStr;const msg=due.length===1?`Bill due: ${due[0].name}`:`${due.length} bills are due or overdue`;if('Notification' in window&&Notification.permission==='granted'){new Notification('Money MAD',{body:msg})}else{const n=document.getElementById('reminderNotice');if(n)n.remove();const page=document.getElementById('page-home');if(page){const div=document.createElement('div');div.id='reminderNotice';div.className='notice';div.textContent=msg+' — open Plan to review unpaid bills.';page.insertBefore(div,page.firstChild)}}}catch(e){}}
+function checkBillReminders(){try{const todayStr=today();const due=data.bills.filter(b=>!b.paid&&b.due&&b.due<=todayStr);const existing=document.getElementById('reminderNotice');if(!due.length){if(existing)existing.remove();lastReminderDay='';return}if(lastReminderDay===todayStr&&existing)return;lastReminderDay=todayStr;const msg=due.length===1?`Bill due: ${due[0].name}`:`${due.length} bills are due or overdue`;if('Notification' in window&&Notification.permission==='granted'){new Notification('Money MAD',{body:msg});if(existing)existing.remove()}else{if(existing)existing.remove();const page=document.getElementById('page-home');if(page){const div=document.createElement('div');div.id='reminderNotice';div.className='notice';div.textContent=msg+' — open Plan to review unpaid bills.';page.insertBefore(div,page.firstChild)}}}catch(e){}}
 function render(){
  const st=document.getElementById('saveStatus');if(st&&!st.textContent.startsWith('● Saved'))st.textContent='● Saved on this iPhone';
  const mt=monthTotals();$('totalBalance').textContent=money(allBalance());$('monthIncome').textContent=money(mt.income);$('monthExpense').textContent=money(mt.expense);$('netFlow').textContent=money(mt.net);$('netFlow').className='big-number '+(mt.net>=0?'positive':'negative');$('monthLabel').textContent=new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
@@ -167,7 +167,7 @@ document.addEventListener('click',e=>{
  case 'editbill':{const obj=data.bills.find(x=>x.id===id);if(obj)openBill(obj);break}
  case 'editgoal':{const obj=data.goals.find(x=>x.id===id);if(obj)openGoal(obj);break}
  case 'editdebt':{const obj=data.debts.find(x=>x.id===id);if(obj)openDebt(obj);break}
- case 'paybill':{const obj=data.bills.find(x=>x.id===id);if(obj){obj.paid=true;save();render()}break}
+ case 'paybill':{const obj=data.bills.find(x=>x.id===id);if(obj&&!obj.paid)openPayBill(obj);break}
  case 'contribute':contribute(id,'goals');break;
  case 'repay':contribute(id,'debts');break;
  case 'delete':if(confirm('Delete this item?')){data[a.dataset.kind]=data[a.dataset.kind].filter(x=>x.id!==id);save();render()}break;
